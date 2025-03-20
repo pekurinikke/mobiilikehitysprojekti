@@ -1,5 +1,5 @@
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -10,6 +10,9 @@
 #import <React/RCTAssert.h>
 #import <React/RCTDefines.h>
 #import <React/RCTUtils.h>
+
+@class RCTModuleRegistry;
+@class RCTCallableJSModules;
 
 #ifndef RCTLOG_ENABLED
 #define RCTLOG_ENABLED 1
@@ -48,10 +51,7 @@ typedef NS_ENUM(NSInteger, RCTLogLevel) {
 /**
  * An enum representing the source of a log message.
  */
-typedef NS_ENUM(NSInteger, RCTLogSource) {
-  RCTLogSourceNative = 1,
-  RCTLogSourceJavaScript = 2
-};
+typedef NS_ENUM(NSInteger, RCTLogSource) { RCTLogSourceNative = 1, RCTLogSourceJavaScript = 2 };
 
 /**
  * A block signature to be used for custom logging functions. In most cases you
@@ -59,24 +59,28 @@ typedef NS_ENUM(NSInteger, RCTLogSource) {
  * generate a string.
  */
 typedef void (^RCTLogFunction)(
-  RCTLogLevel level,
-  RCTLogSource source,
-  NSString *fileName,
-  NSNumber *lineNumber,
-  NSString *message
-);
+    RCTLogLevel level,
+    RCTLogSource source,
+    NSString *fileName,
+    NSNumber *lineNumber,
+    NSString *message);
 
 /**
  * A method to generate a string from a collection of log data. To omit any
  * particular data from the log, just pass nil or zero for the argument.
  */
-RCT_EXTERN NSString *RCTFormatLog(
-  NSDate *timestamp,
-  RCTLogLevel level,
-  NSString *fileName,
-  NSNumber *lineNumber,
-  NSString *message
-);
+RCT_EXTERN NSString *
+RCTFormatLog(NSDate *timestamp, RCTLogLevel level, NSString *fileName, NSNumber *lineNumber, NSString *message);
+
+/**
+ * A method to generate a string RCTLogLevel
+ */
+RCT_EXTERN NSString *RCTFormatLogLevel(RCTLogLevel);
+
+/**
+ * A method to generate a string from a RCTLogSource
+ */
+RCT_EXTERN NSString *RCTFormatLogSource(RCTLogSource);
 
 /**
  * The default logging function used by RCTLogXX.
@@ -121,13 +125,29 @@ RCT_EXTERN void RCTPerformBlockWithLogFunction(void (^block)(void), RCTLogFuncti
 RCT_EXTERN void RCTPerformBlockWithLogPrefix(void (^block)(void), NSString *prefix);
 
 /**
+ * These methods allows static methods in RCTLog to call NativeModules and TurboModules.
+ * TODO(T112035275) After Bridgeless mixed mode is removed, we can merge these methods
+ */
+RCT_EXTERN void RCTLogSetBridgeModuleRegistry(RCTModuleRegistry *moduleRegistry);
+RCT_EXTERN void RCTLogSetBridgelessModuleRegistry(RCTModuleRegistry *moduleRegistry);
+
+/**
+ * This methods allows static methods in RCTLog to call JS methods.
+ * TODO(T112035275) After Bridgeless mixed mode is removed, we can merge these methods
+ */
+RCT_EXTERN void RCTLogSetBridgeCallableJSModules(RCTCallableJSModules *callableJSModules);
+RCT_EXTERN void RCTLogSetBridgelessCallableJSModules(RCTCallableJSModules *callableJSModules);
+
+/**
  * Private logging function - ignore this.
  */
 #if RCTLOG_ENABLED
 #define _RCTLog(lvl, ...) _RCTLogNativeInternal(lvl, __FILE__, __LINE__, __VA_ARGS__)
 #else
-#define _RCTLog(lvl, ...) do { } while (0)
+#define _RCTLog(lvl, ...) \
+  do {                    \
+  } while (0)
 #endif
 
-RCT_EXTERN void _RCTLogNativeInternal(RCTLogLevel, const char *, int, NSString *, ...) NS_FORMAT_FUNCTION(4,5);
+RCT_EXTERN void _RCTLogNativeInternal(RCTLogLevel, const char *, int, NSString *, ...) NS_FORMAT_FUNCTION(4, 5);
 RCT_EXTERN void _RCTLogJavaScriptInternal(RCTLogLevel, NSString *);

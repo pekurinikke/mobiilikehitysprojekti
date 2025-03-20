@@ -1,5 +1,5 @@
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -28,14 +28,12 @@ RCT_EXTERN const uint64_t RCTProfileTagAlways;
 
 @class RCTBridge;
 
-#define RCTProfileBeginFlowEvent() \
-_Pragma("clang diagnostic push") \
-_Pragma("clang diagnostic ignored \"-Wshadow\"") \
-NSUInteger __rct_profile_flow_id = _RCTProfileBeginFlowEvent(); \
-_Pragma("clang diagnostic pop")
+#define RCTProfileBeginFlowEvent()                                                                                     \
+  _Pragma("clang diagnostic push") _Pragma("clang diagnostic ignored \"-Wshadow\"") NSUInteger __rct_profile_flow_id = \
+      _RCTProfileBeginFlowEvent();                                                                                     \
+  _Pragma("clang diagnostic pop")
 
-#define RCTProfileEndFlowEvent() \
-_RCTProfileEndFlowEvent(__rct_profile_flow_id)
+#define RCTProfileEndFlowEvent() _RCTProfileEndFlowEvent(__rct_profile_flow_id)
 
 RCT_EXTERN dispatch_queue_t RCTProfileGetQueue(void);
 
@@ -60,68 +58,83 @@ RCT_EXTERN void RCTProfileInit(RCTBridge *);
 RCT_EXTERN void RCTProfileEnd(RCTBridge *, void (^)(NSString *));
 
 /**
+ * Route the RCT_PROFILE_BEGIN_EVENT hooks to our loom tracing.
+ */
+#ifdef WITH_LOOM_TRACE
+RCT_EXTERN BOOL _RCTLoomIsProfiling(void);
+RCT_EXTERN void
+_RCTLoomBeginEvent(NSString *name, const char *file, size_t line, NSDictionary<NSString *, NSString *> *args);
+RCT_EXTERN void _RCTLoomEndEvent();
+#else
+#define _RCTLoomIsProfiling(...) NO
+#define _RCTLoomBeginEvent(...)
+#define _RCTLoomEndEvent(...)
+#endif
+
+/**
  * Collects the initial event information for the event and returns a reference ID
  */
-RCT_EXTERN void _RCTProfileBeginEvent(NSThread *calleeThread,
-                                      NSTimeInterval time,
-                                      uint64_t tag,
-                                      NSString *name,
-                                      NSDictionary<NSString *, NSString *> *args);
-#define RCT_PROFILE_BEGIN_EVENT(tag, name, args) \
-  do { \
-    if (RCTProfileIsProfiling()) { \
-      NSThread *__calleeThread = [NSThread currentThread]; \
-      NSTimeInterval __time = CACurrentMediaTime(); \
+RCT_EXTERN void _RCTProfileBeginEvent(
+    NSThread *calleeThread,
+    NSTimeInterval time,
+    uint64_t tag,
+    NSString *name,
+    NSDictionary<NSString *, NSString *> *args);
+#define RCT_PROFILE_BEGIN_EVENT(tag, name, args)                      \
+  do {                                                                \
+    if (_RCTLoomIsProfiling()) {                                      \
+      _RCTLoomBeginEvent(name, __FILE__, __LINE__, args);             \
+    }                                                                 \
+    if (RCTProfileIsProfiling()) {                                    \
+      NSThread *__calleeThread = [NSThread currentThread];            \
+      NSTimeInterval __time = CACurrentMediaTime();                   \
       _RCTProfileBeginEvent(__calleeThread, __time, tag, name, args); \
-    } \
-  } while(0)
+    }                                                                 \
+  } while (0)
 
 /**
  * The ID returned by BeginEvent should then be passed into EndEvent, with the
  * rest of the event information. Just at this point the event will actually be
  * registered
  */
-RCT_EXTERN void _RCTProfileEndEvent(NSThread *calleeThread,
-                                    NSString *threadName,
-                                    NSTimeInterval time,
-                                    uint64_t tag,
-                                    NSString *category);
+RCT_EXTERN void _RCTProfileEndEvent(
+    NSThread *calleeThread,
+    NSString *threadName,
+    NSTimeInterval time,
+    uint64_t tag,
+    NSString *category);
 
-#define RCT_PROFILE_END_EVENT(tag, category) \
-  do { \
-    if (RCTProfileIsProfiling()) { \
-      NSThread *__calleeThread = [NSThread currentThread]; \
-      NSString *__threadName = RCTCurrentThreadName(); \
-      NSTimeInterval __time = CACurrentMediaTime(); \
+#define RCT_PROFILE_END_EVENT(tag, category)                                    \
+  do {                                                                          \
+    if (_RCTLoomIsProfiling()) {                                                \
+      _RCTLoomEndEvent();                                                       \
+    }                                                                           \
+    if (RCTProfileIsProfiling()) {                                              \
+      NSThread *__calleeThread = [NSThread currentThread];                      \
+      NSString *__threadName = RCTCurrentThreadName();                          \
+      NSTimeInterval __time = CACurrentMediaTime();                             \
       _RCTProfileEndEvent(__calleeThread, __threadName, __time, tag, category); \
-    } \
-  } while(0)
+    }                                                                           \
+  } while (0)
 
 /**
  * Collects the initial event information for the event and returns a reference ID
  */
-RCT_EXTERN NSUInteger RCTProfileBeginAsyncEvent(uint64_t tag,
-                                                NSString *name,
-                                                NSDictionary<NSString *, NSString *> *args);
+RCT_EXTERN NSUInteger
+RCTProfileBeginAsyncEvent(uint64_t tag, NSString *name, NSDictionary<NSString *, NSString *> *args);
 
 /**
  * The ID returned by BeginEvent should then be passed into EndEvent, with the
  * rest of the event information. Just at this point the event will actually be
  * registered
  */
-RCT_EXTERN void RCTProfileEndAsyncEvent(uint64_t tag,
-                                        NSString *category,
-                                        NSUInteger cookie,
-                                        NSString *name,
-                                        NSString *threadName);
+RCT_EXTERN void
+RCTProfileEndAsyncEvent(uint64_t tag, NSString *category, NSUInteger cookie, NSString *name, NSString *threadName);
 
 /**
  * An event that doesn't have a duration (i.e. Notification, VSync, etc)
  */
-RCT_EXTERN void RCTProfileImmediateEvent(uint64_t tag,
-                                         NSString *name,
-                                         NSTimeInterval time,
-                                         char scope);
+RCT_EXTERN void RCTProfileImmediateEvent(uint64_t tag, NSString *name, NSTimeInterval time, char scope);
 
 /**
  * Helper to profile the duration of the execution of a block. This method uses
@@ -131,12 +144,12 @@ RCT_EXTERN void RCTProfileImmediateEvent(uint64_t tag,
  *
  * DEPRECATED: this approach breaks debugging and stepping through instrumented block functions
  */
-#define RCTProfileBlock(block, tag, category, arguments) \
-^{ \
-  RCT_PROFILE_BEGIN_EVENT(tag, @(__PRETTY_FUNCTION__), nil); \
-  block(); \
-  RCT_PROFILE_END_EVENT(tag, category, arguments); \
-}
+#define RCTProfileBlock(block, tag, category, arguments)       \
+  ^{                                                           \
+    RCT_PROFILE_BEGIN_EVENT(tag, @(__PRETTY_FUNCTION__), nil); \
+    block();                                                   \
+    RCT_PROFILE_END_EVENT(tag, category, arguments);           \
+  }
 
 /**
  * Hook into a bridge instance to log all bridge module's method calls

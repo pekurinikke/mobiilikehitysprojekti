@@ -1,5 +1,5 @@
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -9,13 +9,14 @@
 
 @class RCTBridge;
 
-typedef NS_ENUM(NSUInteger, RCTFunctionType) {
+typedef NS_ENUM(NSInteger, RCTFunctionType) {
   RCTFunctionTypeNormal,
   RCTFunctionTypePromise,
   RCTFunctionTypeSync,
 };
 
-static inline const char *RCTFunctionDescriptorFromType(RCTFunctionType type) {
+static inline const char *RCTFunctionDescriptorFromType(RCTFunctionType type)
+{
   switch (type) {
     case RCTFunctionTypeNormal:
       return "async";
@@ -31,8 +32,6 @@ static inline const char *RCTFunctionDescriptorFromType(RCTFunctionType type) {
 @property (nonatomic, readonly) const char *JSMethodName;
 @property (nonatomic, readonly) RCTFunctionType functionType;
 
-- (id)invokeWithBridge:(RCTBridge *)bridge
-                module:(id)module
-             arguments:(NSArray *)arguments;
+- (id)invokeWithBridge:(RCTBridge *)bridge module:(id)module arguments:(NSArray *)arguments;
 
 @end

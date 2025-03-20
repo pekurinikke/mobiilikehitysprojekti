@@ -7,7 +7,8 @@ module.exports = {
       "glb",
       "fbx",
       "wav",
-      "mp3"
+      "mp3",
+      "png"
     ]
   }
 };

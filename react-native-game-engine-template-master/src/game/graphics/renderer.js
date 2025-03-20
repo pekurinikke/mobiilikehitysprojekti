@@ -6,6 +6,7 @@ import EffectComposer  from "./effect-composer";
 import RenderPass from "./passes/render-pass";
 import _ from "lodash";
 
+
 global.THREE = THREE;
 
 THREE.suppressExpoWarnings();
