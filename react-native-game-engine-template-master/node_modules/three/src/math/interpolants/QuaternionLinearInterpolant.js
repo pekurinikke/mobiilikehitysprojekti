@@ -4,30 +4,35 @@ import { Quaternion } from '../Quaternion.js';
 /**
  * Spherical linear unit quaternion interpolant.
  *
- * @author tschw
+ * @augments Interpolant
  */
+class QuaternionLinearInterpolant extends Interpolant {
 
-function QuaternionLinearInterpolant( parameterPositions, sampleValues, sampleSize, resultBuffer ) {
+	/**
+	 * Constructs a new SLERP interpolant.
+	 *
+	 * @param {TypedArray} parameterPositions - The parameter positions hold the interpolation factors.
+	 * @param {TypedArray} sampleValues - The sample values.
+	 * @param {number} sampleSize - The sample size
+	 * @param {TypedArray} [resultBuffer] - The result buffer.
+	 */
+	constructor( parameterPositions, sampleValues, sampleSize, resultBuffer ) {
 
-	Interpolant.call( this, parameterPositions, sampleValues, sampleSize, resultBuffer );
+		super( parameterPositions, sampleValues, sampleSize, resultBuffer );
 
-}
+	}
 
-QuaternionLinearInterpolant.prototype = Object.assign( Object.create( Interpolant.prototype ), {
+	interpolate_( i1, t0, t, t1 ) {
 
-	constructor: QuaternionLinearInterpolant,
-
-	interpolate_: function ( i1, t0, t, t1 ) {
-
-		var result = this.resultBuffer,
+		const result = this.resultBuffer,
 			values = this.sampleValues,
 			stride = this.valueSize,
 
-			offset = i1 * stride,
-
 			alpha = ( t - t0 ) / ( t1 - t0 );
 
-		for ( var end = offset + stride; offset !== end; offset += 4 ) {
+		let offset = i1 * stride;
+
+		for ( let end = offset + stride; offset !== end; offset += 4 ) {
 
 			Quaternion.slerpFlat( result, 0, values, offset - stride, values, offset, alpha );
 
@@ -37,7 +42,7 @@ QuaternionLinearInterpolant.prototype = Object.assign( Object.create( Interpolan
 
 	}
 
-} );
+}
 
 
 export { QuaternionLinearInterpolant };

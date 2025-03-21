@@ -1,26 +1,41 @@
 import { Object3D } from '../core/Object3D.js';
 
 /**
- * @author mikael emtinger / http://gomo.se/
- * @author alteredq / http://alteredqualia.com/
- * @author ikerr / http://verold.com
+ * A bone which is part of a {@link Skeleton}. The skeleton in turn is used by
+ * the {@link SkinnedMesh}.
+ *
+ * ```js
+ * const root = new THREE.Bone();
+ * const child = new THREE.Bone();
+ *
+ * root.add( child );
+ * child.position.y = 5;
+ * ```
+ *
+ * @augments Object3D
  */
+class Bone extends Object3D {
 
-function Bone() {
+	/**
+	 * Constructs a new bone.
+	 */
+	constructor() {
 
-	Object3D.call( this );
+		super();
 
-	this.type = 'Bone';
+		/**
+		 * This flag can be used for type testing.
+		 *
+		 * @type {boolean}
+		 * @readonly
+		 * @default true
+		 */
+		this.isBone = true;
+
+		this.type = 'Bone';
+
+	}
 
 }
-
-Bone.prototype = Object.assign( Object.create( Object3D.prototype ), {
-
-	constructor: Bone,
-
-	isBone: true
-
-} );
-
 
 export { Bone };
