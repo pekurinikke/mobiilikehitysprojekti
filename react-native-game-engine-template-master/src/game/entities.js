@@ -1,11 +1,11 @@
 import { THREE } from 'expo-three';
 import Camera from "./components/camera";
-import Cuphead from "./components/cuphead";
+//import Cuphead from "./components/cuphead";
 import HUD from "./components/hud";
 import Turntable from "./components/turntable";
-import Droid from "./components/droid";
-import Portal from "./components/portal";
-import Jet from "./components/jet";
+//import Droid from "./components/droid";
+//import Portal from "./components/portal";
+//import Jet from "./components/jet";
 import { clear } from "./utils/three";
 import * as OIMO from "oimo";
 

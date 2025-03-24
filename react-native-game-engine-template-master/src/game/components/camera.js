@@ -1,47 +1,57 @@
 import { THREE } from "expo-three";
-import { screen, remap } from "../utils";
-import { noise } from "../utils/perlin";
+import { add } from "../utils/three";
+import { sound } from "../utils";
 
-export default () => {
-	const camera = new THREE.PerspectiveCamera(
-		90,
-		screen.width / screen.height,
-		1,
-		1000
-	);
+export default (config) => {
+    const {
+        parent,
+        world,
+        dynamic = true,
+        x = 0,
+        y = 0,
+        z = 0,
+        width = 1.1,
+        breadth = 1.1,
+        height = 1.1,
+        scale = 1,
+        color = 0x00e6ff
+    } = config;
 
-	const lookAt = camera.lookAt;
+    const box = new THREE.Mesh(
+        new THREE.BoxGeometry(width, height, breadth),
+        new THREE.MeshStandardMaterial({ color })
+    );
 
-	//-- Overriding the lookAt function so I always
-	//-- have a quick reference to the lookAt vector
-	camera.lookAt = vec => {
-		lookAt.apply(camera, [vec]);
-		camera.target = vec;
-	};
+    box.position.set(x, y, z);
+    box.scale.setScalar(scale);
 
-	camera.timelines = {};
+    add(parent, box);
 
-	camera.shake = (duration = 400) => {
-		if (!camera.timelines.shake) {
-			camera.timelines.shake = {
-				duration,
-				startPos: camera.position.clone(),
-				seed: Date.now(),
-				update(self, entities, percent, { seed, startPos }) {
-					self.position.x =
-						startPos.x + remap(noise(seed + percent), 0, 1, -1.25, 1.25);
-					self.position.y =
-						startPos.y +
-						remap(noise(seed + 250 + percent), 0, 1, -1.25, 1.25);
-				}
-			};
-		}
-	};
+    const crash = sound?.(CrashFile, 16 * 40);
 
-	camera.resize = (width, height, dpr) => {
-		camera.aspect = width / height;
-		camera.updateProjectionMatrix();
-	};
-
-	return camera;
+    return {
+        model: box,
+        bodies: [
+            world.add({
+                type: "box",
+                size: [width * scale, height * scale, breadth * scale],
+                pos: [x, y, z],
+                rot: [0, 0, 0],
+                move: dynamic,
+                density: 0.1,
+                friction: 0.9,
+                restitution: 0.2,
+                belongsTo: 1,
+                collidesWith: 0xffffffff
+            })
+        ],
+        collision: (self, other, contact, entities, { gamepadController }) => {
+            if (!contact.close) {
+                crash?.();
+                entities.camera?.shake();
+                gamepadController?.vibrate();
+            }
+        },
+        removable: (frustum, self) => !frustum.intersectsObject(self.model)
+    };
 };

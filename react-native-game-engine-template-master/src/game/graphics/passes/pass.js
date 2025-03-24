@@ -1,72 +1,51 @@
 import { THREE } from 'expo-three';
 
-THREE.Pass = function () {
+/**
+ * Pass class - base class for all post-processing passes.
+ */
+class Pass {
+  constructor() {
+    this.enabled = true; // If true, the pass is processed by the composer
+    this.needsSwap = true; // If true, swap read and write buffer after rendering
+    this.clear = false; // If true, clear buffer before rendering
+    this.renderToScreen = false; // If true, the result of the pass is rendered to screen
+  }
 
-	// if set to true, the pass is processed by the composer
-	this.enabled = true;
+  setSize(width, height) {
+    // Method to be implemented in derived passes (if needed)
+  }
 
-	// if set to true, the pass indicates to swap read and write buffer after rendering
-	this.needsSwap = true;
+  render(renderer, writeBuffer, readBuffer, delta, maskActive) {
+    console.error('THREE.Pass: .render() must be implemented in derived pass.');
+  }
+}
 
-	// if set to true, the pass clears its buffer before rendering
-	this.clear = false;
+THREE.Pass = Pass; // Assign to the global THREE namespace
 
-	// if set to true, the result of the pass is rendered to screen
-	this.renderToScreen = false;
+/**
+ * FullScreenQuad class - renders a fullscreen quad with a given material.
+ */
+class FullScreenQuad {
+  constructor(material) {
+    const geometry = new THREE.PlaneBufferGeometry(2, 2);
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    this._mesh = new THREE.Mesh(geometry, material);
+  }
 
-};
+  get material() {
+    return this._mesh.material;
+  }
 
-Object.assign( THREE.Pass.prototype, {
+  set material(value) {
+    this._mesh.material = value;
+  }
 
-	setSize: function ( width, height ) {},
+  render(renderer) {
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    renderer.render(this._mesh, camera);
+  }
+}
 
-	render: function ( renderer, writeBuffer, readBuffer, delta, maskActive ) {
+THREE.Pass.FullScreenQuad = FullScreenQuad; // Assign to the global THREE namespace
 
-		console.error( 'THREE.Pass: .render() must be implemented in derived pass.' );
-
-	}
-
-} );
-
-THREE.Pass.FullScreenQuad = ( function () {
-
-	var camera = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
-	var geometry = new THREE.PlaneBufferGeometry( 2, 2 );
-
-	var FullScreenQuad = function ( material ) {
-
-		this._mesh = new THREE.Mesh( geometry, material );
-
-	};
-
-	Object.defineProperty( FullScreenQuad.prototype, 'material', {
-
-		get: function () {
-
-			return this._mesh.material;
-
-		},
-
-		set: function ( value ) {
-
-			this._mesh.material = value;
-
-		}
-
-	} );
-
-	Object.assign( FullScreenQuad.prototype, {
-
-		render: function ( renderer ) {
-
-			renderer.render( this._mesh, camera );
-
-		}
-
-	} );
-
-	return FullScreenQuad;
-
-} )();
-
-export default THREE.Pass;
+export default Pass; // Export the Pass class

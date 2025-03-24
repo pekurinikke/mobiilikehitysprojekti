@@ -1,28 +1,20 @@
 import { THREE } from 'expo-three';
-import Pass from "./pass";
+import Pass from './pass';
 
 /**
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.ClearMaskPass = function () {
+class ClearMaskPass extends Pass {
+  constructor() {
+    super();
+    this.needsSwap = false;
+  }
 
-	Pass.call( this );
+  render(renderer, writeBuffer, readBuffer, delta, maskActive) {
+    // Disable stencil test to clear the mask
+    renderer.state.buffers.stencil.setTest(false);
+  }
+}
 
-	this.needsSwap = false;
-
-};
-
-THREE.ClearMaskPass.prototype = Object.create( THREE.Pass.prototype );
-
-Object.assign( THREE.ClearMaskPass.prototype, {
-
-	render: function ( renderer, writeBuffer, readBuffer, delta, maskActive ) {
-
-		renderer.state.buffers.stencil.setTest( false );
-
-	}
-
-} );
-
-export default THREE.ClearMaskPass;
+export default ClearMaskPass;
