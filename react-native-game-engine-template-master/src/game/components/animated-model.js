@@ -1,22 +1,34 @@
 import { add, cloneMesh } from "../utils/three";
 import { clamp } from "../utils";
 
-export default async ({ parent, x = 0, y = 0, z = 0, scale = 1, mesh, morphTargets = {} }) => {
-    const model = cloneMesh(await Promise.resolve(mesh));
+export default async ({ parent, x = 0, z = 0, y = 0, scale = 1, mesh, morphTargets = {} }) => {
 
-    Object.assign(model.position, { x, y, z });
-    model.scale.set(scale, scale, scale);
+	const model = cloneMesh(await Promise.resolve(mesh));
+	
+	model.position.x = x;
+	model.position.y = y;
+	model.position.z = z;
+	model.scale.x = scale;
+	model.scale.y = scale;
+	model.scale.z = scale;
 
-    add(parent, model);
+	add(parent, model);
 
-    const poses = Object.fromEntries(
-        Object.entries(morphTargets).map(([key, index]) => [
-            key,
-            (weight) => weight == null 
-                ? model.morphTargetInfluences?.[index] 
-                : (model.morphTargetInfluences[index] = clamp(weight, 0, 1))
-        ])
-    );
+	const poses = {};
+	
+	Object.keys(morphTargets).forEach(key => {
+		const index = morphTargets[key];
 
-    return { model, poses };
+		poses[key] = weight => {
+			if (weight === undefined || weight === null)
+				return model.morphTargetInfluences[index];
+
+			model.morphTargetInfluences[index] = clamp(weight, 0, 1);
+		};
+	})
+
+	return {
+		model,
+		poses
+	};
 };

@@ -1,67 +1,61 @@
-import React, { memo, useMemo } from "react";
-import { StyleSheet, View } from "react-native";
+import ExpoTHREE, { THREE } from "expo-three";
+import AnimatedModel from "./animated-model";
+import { firstMesh } from "../utils/three";
+import { between } from "../utils";
+import JetFile from "../../assets/models/jet.glb";
 
-const HUDRenderer = memo(({ gamepadController = {} }) => {
-    const {
-        stickRadius = 0,
-        stickPosition = { x: 0, y: 0 },
-        aRadius = 0,
-        aPosition = { x: 0, y: 0 },
-        bRadius = 0,
-        bPosition = { x: 0, y: 0 },
-        a = false,
-        b = false,
-        x = 0,
-        y = 0
-    } = gamepadController;
+const mesh = ExpoTHREE.loadAsync(JetFile).then(gltf => firstMesh(gltf.scene));
 
-    const usingStick = !!(x || y);
+export default async ({ parent, x = 0, y = 0, z = 0}) => {
 
-    const stickStyle = useMemo(() => ({
-        width: stickRadius * 2,
-        height: stickRadius * 2,
-        borderRadius: stickRadius,
-        left: stickPosition.x - stickRadius,
-        top: stickPosition.y - stickRadius,
-        backgroundColor: usingStick ? "white" : "transparent"
-    }), [stickRadius, stickPosition, usingStick]);
+	const animated = await AnimatedModel({
+		parent,
+		x,
+		y,
+		z,
+		mesh,
+		morphTargets: {
+			rudderLeft: 0,
+			rudderRight: 1,
+			leftFlapUp: 2,
+			leftFlapDown: 3,
+			rightFlapUp: 4,
+			rightFlapDown: 5
+		}
+	});
 
-    const guideStyle = useMemo(() => ({
-        width: stickRadius * 3,
-        height: stickRadius * 3,
-        borderRadius: stickRadius * 1.5,
-        borderWidth: usingStick ? 5 : 0,
-        left: stickPosition.x - stickRadius * 1.5,
-        top: stickPosition.y - stickRadius * 1.5
-    }), [stickRadius, stickPosition, usingStick]);
+	const timelines = {};
 
-    const buttonStyle = (radius, position, active) => ({
-        width: radius * 2,
-        height: radius * 2,
-        borderRadius: radius,
-        left: position.x - radius,
-        top: position.y - radius,
-        backgroundColor: active ? "white" : "transparent"
-    });
+	timelines.controls = {
+		while: true,
+		directions: [
+			{ heading: 0, pose: "rudderRight" },
+			{ heading: -60, pose: "leftFlapDown" },
+			{ heading: -120, pose: "leftFlapUp" },
+			{ heading: -180, pose: "rudderLeft" },
+			{ heading: 60, pose: "rightFlapUp" },
+			{ heading: 120, pose: "rightFlapDown" },
+			{ heading: 180, pose: "rudderLeft" }
+		],
+		update(self, entities, { directions }, { gamepadController }) {
+			let target = null;
 
-    return (
-        <>
-            <View style={[styles.container, stickStyle]} />
-            <View style={[styles.container, guideStyle]} />
-            <View style={[styles.container, buttonStyle(aRadius, aPosition, a)]} />
-            <View style={[styles.container, buttonStyle(bRadius, bPosition, b)]} />
-        </>
-    );
-});
+			if (gamepadController.heading !== null ) {
+				const degrees = THREE.Math.radToDeg(gamepadController.heading)
+				const direction = directions.find(x => between(degrees, x.heading - 30, x.heading + 30))
 
-const styles = StyleSheet.create({
-    container: {
-        position: "absolute",
-        backgroundColor: "transparent",
-        borderWidth: 5,
-        borderColor: "white",
-        opacity: 0.25
-    }
-});
+				if (direction)
+					target = direction.pose;
+			}
 
-export default () => ({ renderer: <HUDRenderer /> });
+			directions.forEach(x => {
+				const pose = self.poses[x.pose];
+				const val = pose();
+
+				pose(val + (x.pose === target ? 0.01 : -0.01))
+			});
+		}
+	};
+
+	return { ...animated, ...{ timelines }};
+};
