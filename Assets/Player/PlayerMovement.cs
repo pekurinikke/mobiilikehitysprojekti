@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     public bool grounded;
     float xInput;
     float yInput;
+    public Joystick joystick;
     void Start()
     {
 
@@ -26,9 +27,10 @@ public class PlayerMovement : MonoBehaviour
     {
         GetInput();
         HandleJump();
+
     }
     void GetInput(){
-        xInput = Input.GetAxis("Horizontal");
+        xInput = joystick.Horizontal;
         yInput = Input.GetAxis("Vertical");
     }
     void MoveWithInput(){
