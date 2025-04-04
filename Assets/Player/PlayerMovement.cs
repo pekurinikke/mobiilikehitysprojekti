@@ -9,8 +9,6 @@ public class PlayerMovement : MonoBehaviour
     public float jumpSpeed;
 
     public float groundDecay;
-
-    [Range(0f, 1f)]
     public Rigidbody2D body;
     public BoxCollider2D groundCheck;
     public LayerMask groundMask;
