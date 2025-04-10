@@ -688,7 +688,7 @@ Transform:
   m_GameObject: {fileID: 1199348922}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.111, y: -0.161, z: -163.11182}
+  m_LocalPosition: {x: -0.06, y: -0.08, z: -163.11182}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -708,6 +708,7 @@ GameObject:
   - component: {fileID: 1316413053}
   - component: {fileID: 1316413052}
   - component: {fileID: 1316413051}
+  - component: {fileID: 1316413054}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -799,6 +800,52 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!61 &1316413054
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316413049}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &1389705624
 GameObject:
   m_ObjectHideFlags: 0
@@ -891,6 +938,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 862361701}
     - target: {fileID: 4394439750149487577, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4394439750149487577, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
       propertyPath: jumpButton
       value: 
       objectReference: {fileID: 1737218000}
@@ -903,8 +954,40 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5697264097759115136, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5697264097759115136, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6987418518446911900, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7030908264844847304, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7030908264844847304, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7107161572632593274, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -882
+      objectReference: {fileID: 0}
+    - target: {fileID: 7377157779410704096, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7451937163455642757, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7451937163455642757, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 7901996130707120556, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
       propertyPath: m_LocalPosition.x
@@ -951,8 +1034,16 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8050543192610104498, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8050543192610104498, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
       propertyPath: m_TagString
-      value: Player
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 8087242245476250583, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
