@@ -5,7 +5,10 @@ TagManager:
   serializedVersion: 3
   tags:
   - Enemy
+<<<<<<< HEAD
+=======
   - SpikyEnemy
+>>>>>>> 96f4c647c72978e41f8d7773bf7d25c71a1f4e4e
   layers:
   - Default
   - TransparentFX
@@ -16,7 +19,11 @@ TagManager:
   - Player
   - Ground
   - Enemy
+<<<<<<< HEAD
+  - 
+=======
   - EnemyCollider
+>>>>>>> 96f4c647c72978e41f8d7773bf7d25c71a1f4e4e
   - 
   - 
   - 

@@ -1132,6 +1132,13 @@ PrefabInstance:
     - target: {fileID: 5203012260814607908, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
       propertyPath: m_IsTrigger
       value: 0
+    - target: {fileID: 4394439750149487577, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
+      propertyPath: groundMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5697264097759115136, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5697264097759115136, guid: 17993105af1f6d24096b5243ccb49726, type: 3}
       propertyPath: m_TagString
