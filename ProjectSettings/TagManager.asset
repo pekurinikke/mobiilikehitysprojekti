@@ -4,11 +4,9 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Enemy
-<<<<<<< HEAD
-=======
   - SpikyEnemy
->>>>>>> 96f4c647c72978e41f8d7773bf7d25c71a1f4e4e
+  - Enemy
+  - Message
   layers:
   - Default
   - TransparentFX
@@ -16,14 +14,10 @@ TagManager:
   - 
   - Water
   - UI
-  - Player
-  - Ground
-  - Enemy
-<<<<<<< HEAD
   - 
-=======
-  - EnemyCollider
->>>>>>> 96f4c647c72978e41f8d7773bf7d25c71a1f4e4e
+  - 
+  - 
+  - 
   - 
   - 
   - 
@@ -49,12 +43,6 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Player
-    uniqueID: 2090425439
-    locked: 0
-  - name: Enemy
-    uniqueID: 2672313033
     locked: 0
   m_RenderingLayers:
   - Default
