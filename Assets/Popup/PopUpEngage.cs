@@ -44,4 +44,10 @@ public class PopUpEngage : MonoBehaviour
         window.SetActive(false);
         queueChecker = null;
     }
+     private void OnTrigger2D(Collider2D collision)
+    {
+        if (collision.tag == "Player"){
+            Debug.LogError("Detected");
+        }
+    }
 }
