@@ -272,7 +272,7 @@ MonoBehaviour:
   groundCheck: {fileID: 6987418518446911900}
   groundMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 0
   grounded: 0
   joystick: {fileID: 0}
 --- !u!1 &8087242245476250583
