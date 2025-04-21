@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class EnemyController : MonoBehaviour
 {
@@ -192,12 +193,13 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    // Vahingoittaa pelaajaa jos koskettaa
+    // Resettaa tason mikäli koskeettaa pelaajaa
     protected void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Ouch!");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            //Debug.Log("Ouch!");
         }
     }
 
