@@ -82,6 +82,14 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector3(direction, 1, 1);
         }
     }
+    public void JumpButtonPressed()
+{
+    if (grounded)
+    {
+        Debug.Log("Jump button clicked via UI");
+        body.linearVelocity = new Vector2(body.linearVelocity.x, jumpSpeed);
+    }
+}
 
     void HandleJump()
     {
