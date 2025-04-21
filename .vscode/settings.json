@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "mobiilikehitysprojekti.sln"
+    "dotnet.defaultSolution": "Mobile game.sln"
 }
