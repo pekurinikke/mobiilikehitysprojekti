@@ -140,7 +140,7 @@ MonoBehaviour:
   moveRadius: 5
   playerLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
 --- !u!61 &1252114267449908865
 BoxCollider2D:
   m_ObjectHideFlags: 0

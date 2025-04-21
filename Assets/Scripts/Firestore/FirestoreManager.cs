@@ -9,6 +9,7 @@ public class FirestoreManager : MonoBehaviour
     void Start()
     {
         //SavePlayerData("Test Player", 220.0f);
+        StartCoroutine(GetPlayerData());
     }
 
     public void SavePlayerData(string playerName, float time)
@@ -69,6 +70,28 @@ public class FirestoreManager : MonoBehaviour
 
         yield return request.SendWebRequest();
         Debug.Log(request.result == UnityWebRequest.Result.Success ? "New player data added" : "Something went wrong:" + request.error);
+    }
+
+    IEnumerator GetPlayerData()
+    {
+
+        UnityWebRequest request = UnityWebRequest.Get(firestoreBaseUrl);
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            string jsonResult = request.downloadHandler.text;
+            Debug.Log($"Firestore Data: {jsonResult}");
+
+            // Käsittele JSON
+            FirestoreDataParser.ProcessFirestoreJson(jsonResult);
+        }
+        else
+        {
+            Debug.LogError("Error fetching data: " + request.error);
+        }
     }
 
     private float ExtractTimeFromJson(string json)
