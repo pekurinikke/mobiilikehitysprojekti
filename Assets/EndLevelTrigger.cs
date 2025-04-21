@@ -19,6 +19,7 @@ public class EndLevelTrigger : MonoBehaviour
             //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             panel.SetActive(true);
             Time.timeScale = 0;
+            Debug.Log("Level completed")
         }
     }
 }
