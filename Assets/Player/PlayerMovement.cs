@@ -86,7 +86,6 @@ public class PlayerMovement : MonoBehaviour
 {
     if (grounded)
     {
-        Debug.Log("Jump button clicked via UI");
         body.linearVelocity = new Vector2(body.linearVelocity.x, jumpSpeed);
     }
 }

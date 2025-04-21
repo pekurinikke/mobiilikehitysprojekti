@@ -47,7 +47,7 @@ public class PopUpEngage : MonoBehaviour
      private void OnTrigger2D(Collider2D collision)
     {
         if (collision.tag == "Player"){
-            Debug.LogError("Detected");
+            Debug.Log("Detected");
         }
     }
 }
