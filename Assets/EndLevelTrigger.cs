@@ -18,6 +18,7 @@ public class EndLevelTrigger : MonoBehaviour
             timerManager.EndTimer();
             //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             panel.SetActive(true);
+            Time.timeScale = 0;
         }
     }
 }
