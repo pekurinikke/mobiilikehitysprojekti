@@ -274,7 +274,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   grounded: 0
-  joystick: {fileID: 0}
+  joystick: {fileID: 4896429619335561538, guid: ba16fe5e24f47a14b87b9749f28c2b45, type: 3}
 --- !u!1 &8087242245476250583
 GameObject:
   m_ObjectHideFlags: 0
