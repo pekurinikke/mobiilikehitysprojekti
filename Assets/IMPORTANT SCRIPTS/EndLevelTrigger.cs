@@ -2,10 +2,24 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class EndLevelTrigger : MonoBehaviour
 {
-        void OnTriggerEnter2D(Collider2D collision)
+    private TimerManager timerManager;
+    public GameObject panel;
+
+    void Start()
     {
-        if (collision.tag == "Player"){
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        timerManager = FindFirstObjectByType<TimerManager>();
+        panel.SetActive(false);
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Player")
+        {
+            timerManager.EndTimer();
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            panel.SetActive(true);
+            Time.timeScale = 0;
+            Debug.Log("Level completed");
         }
     }
 }
