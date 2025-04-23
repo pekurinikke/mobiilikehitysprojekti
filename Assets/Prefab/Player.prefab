@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7107161572632593274}
   - component: {fileID: 5203012260814607908}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Collider
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 7030908264844847304}
   - component: {fileID: 8501873824056940828}
   - component: {fileID: 1266705870661315449}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -199,7 +199,7 @@ GameObject:
   - component: {fileID: 7901996130707120556}
   - component: {fileID: 7377157779410704096}
   - component: {fileID: 4394439750149487577}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -285,7 +285,7 @@ GameObject:
   m_Component:
   - component: {fileID: 611983219072515619}
   - component: {fileID: 6987418518446911900}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}

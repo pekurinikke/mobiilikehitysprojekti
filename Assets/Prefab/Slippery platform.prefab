@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1677958921735988530}
   - component: {fileID: 7974852214732769857}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6358952855325572995}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Slippery platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 923076399250415234}
   - component: {fileID: 6745354284889710113}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
